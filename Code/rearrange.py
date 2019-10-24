@@ -2,9 +2,9 @@ import random
 import sys
 
 if __name__ == "__main__":
-    sentence = str(sys.argv[1])
+    listt = sys.argv[1:]
     #print(type(sentence))
-    listt = list(sentence.split())
+    # listt = list(sentence.split())
     #print(type(listt))
     #print(sentence)
     #print(len(listt))

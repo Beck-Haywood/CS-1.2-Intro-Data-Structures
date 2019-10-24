@@ -16,7 +16,7 @@ if __name__ == "__main__":
     #         randomized_sentence.append(list_of_words[random_index])
     #         list_of_words.pop(random_index)
     # print(randomized_sentence)
-    words1 = words.split()
+    words1 = words.splitlines()
     words_list = []
     for i in range(num_of_words):
         random_index = random.randint(0, len(words1) - 1)
