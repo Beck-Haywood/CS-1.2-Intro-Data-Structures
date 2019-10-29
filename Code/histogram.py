@@ -5,41 +5,42 @@ import os
 import random
 import numpy as np
 
-
-def make_histogram(file_name):
-    #Using dictionarys
-    
+def read_word_file(file_name):
     f = open(file_name, 'r')
     words = f.read().split()
     f.close()
+    return words
+def make_histogram():
+    #Using dictionarys
+    words = read_word_file(file_name)
     histogram = {}
     for word in words:
         #word = word.replace('"', '')
         word = word.strip('?!,.-*[]:').lower()
         histogram[word] = histogram.get(word, 0) + 1 
-    print(len(words))
+    #print(len(words))
     return histogram   
     
 def unique_words():
     #Using dictionarys
     
-    histogram = make_histogram(file_name)
+    histogram = make_histogram()
     print(len(histogram))
     
 def frequency():
     #Using dictionarys
     
-    word = input("Enter a word to check how many times it is said in the text document! ")
-    histogram = make_histogram(file_name)
-    print(histogram[word])
-    frequent_word = max(histogram, key=histogram.get)
-    least_frequent_word = min(histogram, key=histogram.get)
+    #word = input("Enter a word to check how many times it is said in the text document! ")
+    histogram = make_histogram()
+    #print(histogram[word])
+    #frequent_word = max(histogram, key=histogram.get)
+    #least_frequent_word = min(histogram, key=histogram.get)
 
-    occursences1 = histogram.get(frequent_word)
-    occursences2 = histogram.get(least_frequent_word)
+    #occursences1 = histogram.get(frequent_word)
+    #occursences2 = histogram.get(least_frequent_word)
 
-    print(f'This is the most frequent word: {frequent_word}. This many times {occursences1}')
-    print(f'This is the least frequent word: {least_frequent_word}. This many times {occursences2}')
+    #print(f'This is the most frequent word: {frequent_word}. This many times {occursences1}')
+    #print(f'This is the least frequent word: {least_frequent_word}. This many times {occursences2}')
 
     #print(sorted(histogram, key=histogram.get, reverse=True))
     sortedwords = sorted(histogram, key=histogram.get, reverse=True)
@@ -54,78 +55,68 @@ def frequency():
     file.write(new)
     file.close()
 def random_word():
-    histogram = make_histogram(file_name)
+    histogram = make_histogram()
     random_word = random.choice(list(histogram.items()))
     print(random_word)
 def random_word_frequency():
-    histogram = make_histogram(file_name)
-    f = open(file_name, 'r')
-    words = f.read().split()
-    f.close()
-    #new_histogram = {}
-    #for word in words:
-    #    #word = word.replace('"', '')
-    #    word = word.strip('?!,.-*[]:').lower()
-    #    new_histogram[word] = new_histogram.get(word, 0) + 1 
+    #makes histogram
+    histogram = make_histogram()
+    #Reads file to use words
+    words = read_word_file(file_name)
+    #Copys histogram so we can edit it in a loop without breaking the loop
     new_histogram = histogram.copy()
+    #Defining total words
     total_words = len(words)
+    #This makes a new histogram that has values of percentage frequency/total_words. Instead of the frequency
     for word in histogram:
         frequency = histogram.get(word)
         
         new_histogram[word] = (frequency / total_words)
-       
+    #Initilizes the lists
     list_of_probabilites = []
     list_of_unique_words = []
+    #Creates the weighed word list
     for word in new_histogram:
         list_of_probabilites.append(new_histogram[word])
-
+    #Creates the unique word list
     for word in new_histogram:
         list_of_unique_words.append(word)
-
+    #The numpy function that takes the array, and the list of weight for each item in the array
     random_word = np.random.choice(a = list_of_unique_words, p = list_of_probabilites)
+
     return random_word
 def test_random_word_frequency():
-    f = open(file_name, 'r')
-    words = f.read().split()
-    f.close()
-    fake_histogram = {}
-    for index in range(len(words)):
+    #Reads file to use words
+    words = read_word_file(file_name)
+    #Initilizes the random weighed histogram
+    weighted_histogram = {}
+    
+    for index in range(len(words)): #Change len(words) to 1000 for a better test
+        index += 1
         random_word = random_word_frequency()
-        fake_histogram[random_word] = fake_histogram.get(random_word, 0) + 1 
-    #print(fake_histogram)
-    sortedwords = sorted(fake_histogram, key=fake_histogram.get, reverse=True)
+        weighted_histogram[random_word] = weighted_histogram.get(random_word, 0) + 1 
+    #print(weighted_histogram)
+    #Sorts the weighed histogram
+    sortedwords = sorted(weighted_histogram, key=weighted_histogram.get, reverse=True)
+    #Turns the histogram into a string
     new = ''
     place = 0
     for word in sortedwords: 
         place += 1
-        value = fake_histogram.get(word)
+        value = weighted_histogram.get(word)
         new += (str(place) + '. ' + word + '    Occurrences: ' + str(value) + '\n')
-
-    file = open('fakesortedwords.txt', 'w+')
+    #Writes test file
+    file = open('weightedsortedwords.txt', 'w+')
     file.write(new)
     file.close()
 
-
-
-
-
-
 if __name__ == "__main__":
     file_name = sys.argv[1:]
-    file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/words.txt'
-    #file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/poemtest.txt'
-    #make_histogram(file_name)
+    #file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/words.txt'
+    file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/poemtest.txt'
+    #make_histogram()
     test_random_word_frequency()
     frequency()
-
-
-
-
-
-
-
-
-
 
 
     #cwd = os.getcwd()  # Get the current working directory (cwd)

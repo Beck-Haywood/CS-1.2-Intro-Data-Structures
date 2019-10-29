@@ -1,0 +1,5 @@
+1. fish    Occurrences: 488
+2. blue    Occurrences: 149
+3. red    Occurrences: 135
+4. one    Occurrences: 116
+5. two    Occurrences: 112
