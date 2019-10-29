@@ -17,6 +17,7 @@ def make_histogram(file_name):
         #word = word.replace('"', '')
         word = word.strip('?!,.-*[]:').lower()
         histogram[word] = histogram.get(word, 0) + 1 
+    print(len(words))
     return histogram   
     
 def unique_words():
@@ -70,48 +71,62 @@ def random_word_frequency():
     total_words = len(words)
     for word in histogram:
         frequency = histogram.get(word)
-        #This one works but we need to change it to a seperate histogram
-        #histogram[frequency / total_words] = histogram.pop(word)
-        #new_histogram[frequency / total_words] = new_histogram.pop(word)
-        #value = new_histogram.get[word]
-        '''
-        new_histogram[frequency / total_words] = new_histogram[word]
-        del new_histogram[word]
-        '''
+        
         new_histogram[word] = (frequency / total_words)
-        #print(frequency / total_words)
-        #print(new_histogram)
-        list_of_probabilites = []
-        list_of_unique_words = []
+       
+    list_of_probabilites = []
+    list_of_unique_words = []
     for word in new_histogram:
         list_of_probabilites.append(new_histogram[word])
+
     for word in new_histogram:
         list_of_unique_words.append(word)
-    #print(list_of_unique_words)
-    test = np.random.choice(a = list_of_unique_words, p = list_of_probabilites)
-    return test
-    #print(test)
+
+    random_word = np.random.choice(a = list_of_unique_words, p = list_of_probabilites)
+    return random_word
 def test_random_word_frequency():
-    pass
+    f = open(file_name, 'r')
+    words = f.read().split()
+    f.close()
+    fake_histogram = {}
+    for index in range(len(words)):
+        random_word = random_word_frequency()
+        fake_histogram[random_word] = fake_histogram.get(random_word, 0) + 1 
+    #print(fake_histogram)
+    sortedwords = sorted(fake_histogram, key=fake_histogram.get, reverse=True)
+    new = ''
+    place = 0
+    for word in sortedwords: 
+        place += 1
+        value = fake_histogram.get(word)
+        new += (str(place) + '. ' + word + '    Occurrences: ' + str(value) + '\n')
+
+    file = open('fakesortedwords.txt', 'w+')
+    file.write(new)
+    file.close()
+
+
 
 
 
 
 if __name__ == "__main__":
     file_name = sys.argv[1:]
-    #file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/words.txt'
-    file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/poemtest.txt'
-    make_histogram(file_name)
-    x = 0
-    while x < 10000:
-        random_word_frequency()
+    file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/words.txt'
+    #file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/poemtest.txt'
+    #make_histogram(file_name)
+    test_random_word_frequency()
+    frequency()
 
-        x += 1
 
-    random_word_frequency()
-    #unique_words()
-    #frequency()
-    #random_word()
+
+
+
+
+
+
+
+
 
     #cwd = os.getcwd()  # Get the current working directory (cwd)
     #files = os.listdir(cwd)  # Get all the files in that directory
