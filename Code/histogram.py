@@ -58,6 +58,36 @@ def random_word():
     histogram = make_histogram()
     random_word = random.choice(list(histogram.items()))
     print(random_word)
+def random_word_frequency_genjis_version():
+    words = read_word_file(file_name)
+    histogram = make_histogram()
+    #Needs
+    #List of frequencys
+    #Random int of every frequency added up.
+    list_of_frequencys = []
+    histogram_words = []
+    random_number = random.randint(1, len(words))
+    count = 0
+    index = 0
+    for key in histogram:
+        list_of_frequencys.append(histogram[key])
+    for word in histogram:
+        histogram_words.append(word)
+    #print(list_of_frequencys)
+    for number in list_of_frequencys:
+        count += number
+        if random_number < count:
+            break
+        else: 
+            index += 1
+    #print(histogram_words)
+   #print (f' rng:{random_number}  total:{count}  index#:{index}')
+    #print (f' random weighted word: {histogram_words[index]} freq is {list_of_frequencys[index]}')
+    #print(histogram_words[index])
+    return histogram_words[index]
+
+    
+
 def random_word_frequency():
     #makes histogram
     histogram = make_histogram()
@@ -93,7 +123,8 @@ def test_random_word_frequency():
     
     for index in range(len(words)): #Change len(words) to 1000 for a better test
         index += 1
-        random_word = random_word_frequency()
+        #random_word = random_word_frequency()
+        random_word = random_word_frequency_genjis_version()
         weighted_histogram[random_word] = weighted_histogram.get(random_word, 0) + 1 
     #print(weighted_histogram)
     #Sorts the weighed histogram
@@ -112,11 +143,12 @@ def test_random_word_frequency():
 
 if __name__ == "__main__":
     file_name = sys.argv[1:]
-    #file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/words.txt'
-    file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/poemtest.txt'
+    file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/words.txt'
+    #file_name = '/Users/beckhaywood/dev/repos/tweet-gen-tutorial/Code/poemtest.txt'
     #make_histogram()
+    #random_word_frequency_genjis_version()
     test_random_word_frequency()
-    frequency()
+    #frequency()
 
 
     #cwd = os.getcwd()  # Get the current working directory (cwd)
