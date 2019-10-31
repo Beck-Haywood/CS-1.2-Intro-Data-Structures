@@ -1,6 +1,7 @@
 from flask import Flask
 from histogram import *
 from sample_word import random_sentence
+#test
 
 
 app = Flask(__name__)
