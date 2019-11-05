@@ -13,7 +13,7 @@ class DictogramTest(unittest.TestCase):
     fish_words = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']
     fish_list = [('one', 1), ('fish', 4), ('two', 1), ('red', 1), ('blue', 1)]
     fish_dict = {'one': 1, 'fish': 4, 'two': 1, 'red': 1, 'blue': 1}
-
+    
     def test_entries(self):
         dictogram = Dictogram(self.fish_words)
         # Verify histogram as dictionary of entries like {word: count}
@@ -23,7 +23,7 @@ class DictogramTest(unittest.TestCase):
         listogram = dictogram.items()
         assert len(listogram) == 5
         self.assertCountEqual(listogram, self.fish_list)  # Ignore item order
-
+    
     def test_contains(self):
         histogram = Dictogram(self.fish_words)
         # All of these words should be found
@@ -82,6 +82,24 @@ class DictogramTest(unittest.TestCase):
         for word in self.fish_words:
             histogram.add_count(word)
         assert histogram.types == 5
+
+    def test_sample(self):
+        histogram = Dictogram(self.fish_words)
+        # Create a list of 10,000 word samples from histogram
+        samples_list = [histogram.sample() for _ in range(10000)]
+        # Create a histogram to count frequency of each word
+        samples_hist = Dictogram(samples_list)
+        # Check each word in original histogram
+        for word, count in histogram.items():
+            # Calculate word's observed frequency
+            observed_freq = count / histogram.tokens
+            # Calculate word's sampled frequency
+            samples = samples_hist.frequency(word)
+            sampled_freq = samples / samples_hist.tokens
+            # Verify word's sampled frequency is close to observed frequency
+            lower_bound = observed_freq * 0.9  # 10% below = 90% = 0.9
+            upper_bound = observed_freq * 1.1  # 10% above = 110% = 1.1
+            assert lower_bound <= sampled_freq <= upper_bound
 
 
 if __name__ == '__main__':

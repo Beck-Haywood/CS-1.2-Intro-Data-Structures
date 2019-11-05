@@ -1,5 +1,3 @@
-#from test_time import time_it
-#from util import read_text_file
 import sys 
 import os 
 import random
@@ -7,11 +5,15 @@ import numpy as np
 from timeit import default_timer as timer
 
 def read_word_file(file_name):
+    """This function asks or a text file, and turns it into a list of words
+    """
     with open(file_name, 'r') as file:
         words = file.read().split()
     return words
 
 def make_histogram(word_list):
+    """This function returns a histogram given a list of words
+    """
     #Using dictionarys
     #word_list = read_word_file(file_name)
     histogram = {}
@@ -42,7 +44,7 @@ def random_word(histogram):
     return random.choice(list(histogram.keys()))
 
 def random_word_frequency(histogram):
-    """makes two lists for the numpy random.choice to operate. Returns a random word
+    """Makes two lists for the numpy random.choice to operate. Returns a random word
     """
     #Reads file to use words
     #Copys histogram so we can edit it in a loop without breaking the loop
@@ -87,8 +89,3 @@ if __name__ == "__main__":
     #write_histogram_to_file(histogram, 'wat.txt')
     #print(frequency(histogram, 'it'))
     #print(random_word_frequency(histogram))
-
-
-    #cwd = os.getcwd()  # Get the current working directory (cwd)
-    #files = os.listdir(cwd)  # Get all the files in that directory
-    #print("Files in %r: %s" % (cwd, files))
