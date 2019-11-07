@@ -19,24 +19,54 @@ class Listogram(list):
     def add_count(self, word, count=1):
         """Increase frequency count of given word by given count amount."""
         # TODO: Increase word frequency by count
+        for index in range(len(self)):
+            if self[index][0] == word:
+                self[index][1] += count
+                self.tokens += count
+                break
+        else:
+            self.append([word, count])
+            self.tokens += count
+            self.types += 1
 
     def frequency(self, word):
         """Return frequency count of given word, or 0 if word is not found."""
-        # TODO: Retrieve word frequency count
+         #TODO: Retrieve word frequency count
+        for item in range(len(self)):
+            if self[item][0] == word:
+                return self[item][1]
+        return 0
+
+        #return self[self.index_of(word)][1]
+
 
     def __contains__(self, word):
         """Return boolean indicating if given word is in this histogram."""
         # TODO: Check if word is in this histogram
+        for item in self:
+            if item[0] == word:
+                return True
+        return False
 
     def index_of(self, target):
         """Return the index of entry containing given target word if found in
         this histogram, or None if target word is not found."""
         # TODO: Implement linear search to find index of entry with target word
+        for item in self:
+            if item[0] == target:
+                return self.index(item)   
+        return None
 
     def sample(self):
         """Return a word from this histogram, randomly sampled by weighting
         each word's probability of being chosen by its observed frequency."""
         # TODO: Randomly choose a word based on its frequency in this histogram
+        rng = random.randint(1, self.tokens)
+        count = 0
+        for item in self:
+            count += item[1]
+            if rng <= count:
+                return item[0]
 
 
 def print_histogram(word_list):
@@ -59,6 +89,7 @@ def print_histogram_samples(histogram):
     # Sample the histogram 10,000 times and count frequency of results
     samples_list = [histogram.sample() for _ in range(10000)]
     samples_hist = Listogram(samples_list)
+
     print('samples: {}'.format(samples_hist))
     print()
     print('Sampled frequency and error from observed frequency:')
@@ -111,4 +142,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
