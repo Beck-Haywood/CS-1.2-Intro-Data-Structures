@@ -24,15 +24,13 @@ def random_sentence(histogram, words):
         sentence_list.append(word)
     sentence = ''
     for word in sentence_list:
-        sentence += f'{word} '
-    #print(sentence)
+        sentence += f'{word} ' #Innefficent could add it to list then join it together
     return sentence
     
 if __name__ == "__main__":
     word_list = read_word_file(sys.argv[1])
     histogram = make_histogram(word_list)
     start = timer()
-    #print(sample_word(histogram))
     print(random_sentence(histogram, 10))
     end = timer()
     print(end - start)
