@@ -63,11 +63,11 @@ class LinkedList(object):
 
     def append(self, item):
         """Insert the given item at the tail of this linked list.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(1) It does the same thing no matter what, no for/while loops and if statements are 0(1)"""
         # TODO: Create new node to hold given item
         # TODO: Append node after tail, if it exists
         node = Node(item)
-        if not self.tail == None:
+        if self.tail is not None:
             self.tail.next = node
         else:
             self.head = node
@@ -76,7 +76,7 @@ class LinkedList(object):
 
     def prepend(self, item):
         """Insert the given item at the head of this linked list.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(1) It does the same thing no matter what, no for/while loops and if statements are 0(1)"""
         # TODO: Create new node to hold given item
         # TODO: Prepend node before head, if it exists
         node = Node(item)
@@ -89,12 +89,12 @@ class LinkedList(object):
 
     def find(self, quality):
         """Return an item from this linked list satisfying the given quality.
-        TODO: Best case running time: O(???) Why and under what conditions?
-        TODO: Worst case running time: O(???) Why and under what conditions?"""
+        TODO: Best case running time: O(n) I think because its just 1 while loop no matter what its 0(n)
+        TODO: Worst case running time: O(n) I think because its just 1 while loop no matter what its 0(n)"""
         # TODO: Loop through all nodes to find item where quality(item) is True
         # TODO: Check if node's data satisfies given quality function
         node = self.head
-        while not node == None:
+        while node is not None:
             if quality(node.data):
                 return node.data
             else:
@@ -103,15 +103,47 @@ class LinkedList(object):
             
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
-        TODO: Best case running time: O(???) Why and under what conditions?
-        TODO: Worst case running time: O(???) Why and under what conditions?"""
+        TODO: Best case running time: O(1) If it deletes at head or has no head.
+        TODO: Worst case running time: O(n)?? Not sure need clarification """
         # TODO: Loop through all nodes to find one whose data matches given item
         # TODO: Update previous node to skip around node with matching data
         # TODO: Otherwise raise error to tell user that delete has failed
         # Hint: raise ValueError('Item not found: {}'.format(item))
-        #node = self.head
-        #pre_node = 
-        #while not node == None:
+        #Checks if head exists and if not it raises value error
+        if self.head is None:
+            raise ValueError(f'Item not found: {item}')
+        # If linkedlist is size of 1
+        if self.head == self.tail:  #Checks if linked list is only 1 big
+            if self.head.data == item: #Checks if head data matches the item
+                self.head = None
+                self.tail = None 
+                self.size -= 1
+                return
+            else:
+                raise ValueError(f'Item not found: {item}')
+        # If linked list item is in the head and size is not 1
+        if self.head.data == item: #Checks if head data matches the item
+            self.head = self.head.next # Changes the head to next node
+            self.size -= 1
+            return
+        # If linked list item is not in head
+        curr_node = self.head.next  #Defines current node in relation to head
+        prev_node = self.head   #Defines previous node in relation to head
+
+        while curr_node is not None: #While current Node exists so while current node is still itterating through the linked list
+            if curr_node.data == item: #If its a match
+                if curr_node == self.tail: #If item is at tail
+                    self.tail = prev_node #makes the previous the new tail
+                    prev_node.next = None #Sets the node before the tail to point to None because its new tail
+                else:
+                    prev_node.next = curr_node.next #Says the previous node points to what the current node points to because current node is deleted.
+                self.size -= 1 #Deletes one from size to correctly remember length
+                return #Exits loop it found and deleted the item
+            #Iterates to next node
+            prev_node = curr_node
+            curr_node = curr_node.next
+        #If these statements still have not found item, its not in linked list so we raise value error
+        raise ValueError(f"Item not found: {item}")
 
         
 
