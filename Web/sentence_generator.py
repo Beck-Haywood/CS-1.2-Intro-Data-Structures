@@ -54,8 +54,8 @@ if __name__ == "__main__":
 
     word_list = read_word_file(file_name)
 
-    markov_chain = markov(word_list)
+    bruh = markov(word_list)
 
-    random_word(markov_chain, 'fish')
+    random_word(bruh, 'fish')
 
     print(generate_sentence(bruh, 5))
