@@ -24,7 +24,7 @@ def markov(words):
     return markov_dict
 def random_word(markov, word):
     word_options = markov.get(word)
-    print(word_options)
+    #print(word_options)
     rng = random.randint(0, len(word_options)-1)
     #print(word_options[rng])
     return word_options[rng]
