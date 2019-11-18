@@ -14,14 +14,12 @@ def random_walk_sentence():
         word = random_word(markovv, word)
         sentence_list.append(word)
     sentence = []
-    #for word in sentence_list:
-    #    sentence.append(word) #Innefficent could add it to list then join it together
-    #','.join(sentence_list)
-    test = ' '.join(sentence_list)
-    test = test.capitalize()
-    test += '.'
-    return test
     
+    s = ' '.join(sentence_list)
+    s = s.capitalize()
+    s += '.'
+    return s
+
 if __name__ == "__main__":
 
     random_walk_sentence()
