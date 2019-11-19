@@ -58,7 +58,7 @@ class LinkedList(object):
         TODO: Running time: O(1) Why and under what conditions?"""
         # TODO: Loop through all nodes and count one for each
 
-        #return len(self.items())
+        #return len(self.items())  #This function is 0(n) because it calls the items() function.
         return self.size
 
     def append(self, item):
