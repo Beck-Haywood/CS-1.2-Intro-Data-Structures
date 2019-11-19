@@ -87,7 +87,7 @@ class LinkedList(object):
         self.head = node
         self.size += 1
 
-    def find(self, quality):
+    def find(self, quality, case=1):
         """Return an item from this linked list satisfying the given quality.
         TODO: Best case running time: O(n) I think because its just 1 while loop no matter what its 0(n)
         TODO: Worst case running time: O(n) I think because its just 1 while loop no matter what its 0(n)"""
@@ -96,7 +96,10 @@ class LinkedList(object):
         node = self.head
         while node is not None:
             if quality(node.data):
-                return node.data
+                if case == 1:
+                    return node.data
+                elif case == 2:
+                    return node
             else:
                 node = node.next
         return None
@@ -104,7 +107,7 @@ class LinkedList(object):
     def delete(self, item):
         """Delete the given item from this linked list, or raise ValueError.
         TODO: Best case running time: O(1) If it deletes at head or has no head.
-        TODO: Worst case running time: O(n)?? Not sure need clarification """
+        TODO: Worst case running time: O(n) Worst case the item is not in head the linked list is greater than 1 and it is the last item."""
         # TODO: Loop through all nodes to find one whose data matches given item
         # TODO: Update previous node to skip around node with matching data
         # TODO: Otherwise raise error to tell user that delete has failed
@@ -145,7 +148,16 @@ class LinkedList(object):
         #If these statements still have not found item, its not in linked list so we raise value error
         raise ValueError(f"Item not found: {item}")
 
-        
+    def replace(self, data, replacewith):
+        """ This replaces target data with new data (replacewith).
+            Best case running time: O(1) If its empty it raises value error
+            Worse case running time: 0(n) It runs the find method.
+        """
+        if self.head is None:
+            raise ValueError('Linked list is empty')
+        #Runs find on data and case2 then because it returns a Node it calls .data on it and it is set equal to replacewith
+        self.find(lambda item: item == data, case=2).data = replacewith
+
 
 
 def test_linked_list():
@@ -159,6 +171,9 @@ def test_linked_list():
         print('list: {}'.format(ll))
 
     print('head: {}'.format(ll.head))
+    ll.replace(ll.head.data, 'Beck')
+    print('head replaced: {}'.format(ll.head))
+
     print('tail: {}'.format(ll.tail))
     print('length: {}'.format(ll.length()))
 
