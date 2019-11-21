@@ -9,6 +9,7 @@ class HashTable(object):
         """Initialize this hash table with the given initial size."""
         # Create a new list (used as fixed-size array) of empty linked lists
         self.buckets = [LinkedList() for _ in range(init_size)]
+        self.size = 0
 
     def __str__(self):
         """Return a formatted string representation of this hash table."""
@@ -47,7 +48,7 @@ class HashTable(object):
 
     def items(self):
         """Return a list of all items (key-value pairs) in this hash table.
-        TODO: Running time: O(n) Why and under what conditions?"""
+        TODO: Running time: O(n^2) Why and under what conditions?"""
         # Collect all pairs of key-value entries in each bucket
         all_items = []
         for bucket in self.buckets:
@@ -56,103 +57,91 @@ class HashTable(object):
 
     def length(self):
         """Return the number of key-value entries by traversing its buckets.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(1) Why and under what conditions?"""
         # TODO: Loop through all buckets
         # TODO: Count number of key-value entries in each bucket
-        count = 0
-        for bucket in self.buckets:
-            for key, value in bucket.items():
-                count += 1
-        return count
+        return self.size
 
     def contains(self, key):
         """Return True if this hash table contains the given key, or False.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(n^2) Why and under what conditions?"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
-        for bucket in self.buckets:
-            for curr_key, value in bucket.items():
-                if curr_key is key:
-                    return True
+        index = self._bucket_index(key)
+        bucket = self.buckets[index]
+        for curr_key, value in bucket.items():
+            if curr_key is key:
+                return True
         return False
         
-        # index = self._bucket_index(key) #index of where the linked list item is stored in buckets using key
-        # bucket = self.buckets[index] #linked list that stores key value pair for key
-
-        # def quality(keyvalue):
-        #     return key == keyvalue[0] #checks if key is equal to index 0 of the key value tuple
- 
-        # data_tuple = bucket.find(quality) #I think its a tuple
-        # if data_tuple[0] == key:
-        #     return True
-        # return False
-        
-
-
     def get(self, key):
         """Return the value associated with the given key, or raise KeyError.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(n) Why and under what conditions?"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, return value associated with given key
         # TODO: Otherwise, raise error to tell user get failed
         # Hint: raise KeyError('Key not found: {}'.format(key))
 
-        for bucket in self.buckets:
-            for curr_key, value in bucket.items():
-                if curr_key == key:
-                    return value
+        # for bucket in self.buckets:
+        #     for curr_key, value in bucket.items():
+        #         if curr_key == key:
+        #             return value
+        # raise KeyError(f'Key not found: {key}')
+
+        index = self._bucket_index(key)
+        bucket_linkedlist = self.buckets[index]
+
+        node = bucket_linkedlist.find(lambda k: k[0] == key, case=2)
+        #print(f'Node: {node}')
+        if node:
+            return node.data[1]
+        
         raise KeyError(f'Key not found: {key}')
+
+
 
     def set(self, key, value):
         """Insert or update the given key with its associated value.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(n) Why and under what conditions?"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, update value associated with given key
         # TODO: Otherwise, insert given key-value entry into bucket
 
-        found = False
-        for bucket in self.buckets:
-            for curr_key, curr_value in bucket.items():
-                if curr_key == key:
-                    found = True
-                    bucket.delete((curr_key, curr_value))
-                    bucket.append((key, value))
-        if(found is False):
+        index = self._bucket_index(key) #index of where the linked list item is stored in buckets using key
+        bucket = self.buckets[index] #linked list that stores key value pair for key
+
+        data_tuple = bucket.find(lambda k: k[0] == key, case=2) #O(n)
+        
+        if data_tuple:
+            data_value = data_tuple.data[1]
+            bucket.replace((key, data_value), (key, value)) #O(n)
+        else:
             bucket.append((key, value))
-
-        # index = self._bucket_index(key) #index of where the linked list item is stored in buckets using key
-        # bucket = self.buckets[index] #linked list that stores key value pair for key
-
-        # def quality(keyvalue):
-        #     return key == keyvalue[0] #checks if key is equal to index 0 of the key value tuple
- 
-        # data_tuple = bucket.find(quality)
-        # new_tuple = (key, value)
+            self.size += 1
         # try:
         #     bucket.replace((key, data_tuple), new_tuple)
-        # except KeyError:
+        # except (KeyError, ValueError) as error:
         #     bucket.append((key, value))
     
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError.
-        TODO: Running time: O(???) Why and under what conditions?"""
+        TODO: Running time: O(n^2) Why and under what conditions?"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, delete entry associated with given key
         # TODO: Otherwise, raise error to tell user delete failed
         # Hint: raise KeyError('Key not found: {}'.format(key))
 
-        found = False
-        for bucket in self.buckets:
-            for curr_key, curr_value in bucket.items():
-                if curr_key == key:
-                    found = True
-                    bucket.delete((curr_key, curr_value))
-        if(found is False):
-            raise KeyError(f'Key not found: {key}')
-
+        index = self._bucket_index(key) #index of where the linked list item is stored in buckets using key
+        bucket = self.buckets[index] #linked list that stores key value pair for key
+        for curr_key, curr_value in bucket.items(): #
+            if curr_key == key:
+                bucket.delete((curr_key, curr_value))
+                self.size -= 1
+                return
+        raise KeyError(f'Key not found: {key}')
 
 def test_hash_table():
     ht = HashTable()

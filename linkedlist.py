@@ -156,7 +156,10 @@ class LinkedList(object):
         if self.head is None:
             raise ValueError('Linked list is empty')
         #Runs find on data and case2 then because it returns a Node it calls .data on it and it is set equal to replacewith
-        self.find(lambda item: item == data, case=2).data = replacewith
+        if self.find(lambda item: item == data, case=2):
+            self.find(lambda item: item == data, case=2).data = replacewith
+        else:
+            raise KeyError('Data didint exist.')
 
 
 
