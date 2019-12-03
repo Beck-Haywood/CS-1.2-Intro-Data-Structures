@@ -48,7 +48,9 @@ class HashTable(object):
 
     def items(self):
         """Return a list of all items (key-value pairs) in this hash table.
-        TODO: Running time: O(n^2) Why and under what conditions?"""
+        TODO:Running time-- Best case: O(n) loops through every bucket which has a possiblity of 0(1)
+        however the LL method .items is always 0(n)
+             Running time -- Average case: 0(n)^2 Because loops through buckets then loops through LL"""
         # Collect all pairs of key-value entries in each bucket
         all_items = []
         for bucket in self.buckets:
@@ -57,18 +59,21 @@ class HashTable(object):
 
     def length(self):
         """Return the number of key-value entries by traversing its buckets.
-        TODO: Running time: O(1) Why and under what conditions?"""
+        TODO: Running time-- Best case: O(1)  Returns a preset value
+              Running time -- Average case: 0(1) Returns a preset value"""
         # TODO: Loop through all buckets
         # TODO: Count number of key-value entries in each bucket
         return self.size
 
     def contains(self, key):
         """Return True if this hash table contains the given key, or False.
-        TODO: Running time: O(n^2) Why and under what conditions?"""
+        TODO: Running time-- Best case: O(1) It hashes and finds index 0(1) then if the item is in the LL head then its 0(1)
+              Running time-- Average case: 0(n/b) it depends on bucket size"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         index = self._bucket_index(key)
         bucket = self.buckets[index]
+
         for curr_key, value in bucket.items():
             if curr_key is key:
                 return True
@@ -76,24 +81,17 @@ class HashTable(object):
         
     def get(self, key):
         """Return the value associated with the given key, or raise KeyError.
-        TODO: Running time: O(n) Why and under what conditions?"""
+        Running time-- Best case: O(1) It hashes and finds index 0(1) then if the item is in the LL head then its 0(1)
+        Running time-- Average case: 0(n/b) it depends on bucket size"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, return value associated with given key
         # TODO: Otherwise, raise error to tell user get failed
         # Hint: raise KeyError('Key not found: {}'.format(key))
-
-        # for bucket in self.buckets:
-        #     for curr_key, value in bucket.items():
-        #         if curr_key == key:
-        #             return value
-        # raise KeyError(f'Key not found: {key}')
-
         index = self._bucket_index(key)
         bucket_linkedlist = self.buckets[index]
-
         node = bucket_linkedlist.find(lambda k: k[0] == key, case=2)
-        #print(f'Node: {node}')
+
         if node:
             return node.data[1]
         
@@ -103,7 +101,8 @@ class HashTable(object):
 
     def set(self, key, value):
         """Insert or update the given key with its associated value.
-        TODO: Running time: O(n) Why and under what conditions?"""
+        Running time-- Best case: O(1) It hashes and finds index 0(1) then if the item is in the LL head then its 0(1)
+        Running time-- Average case: 0(n/b) it depends on bucket size"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, update value associated with given key
@@ -127,7 +126,8 @@ class HashTable(object):
     
     def delete(self, key):
         """Delete the given key from this hash table, or raise KeyError.
-        TODO: Running time: O(n^2) Why and under what conditions?"""
+        Running time-- Best case: O(1) It hashes and finds index 0(1) then if the item is in the LL head then its 0(1)
+        Running time-- Average case: 0(n/b) it depends on bucket size"""
         # TODO: Find bucket where given key belongs
         # TODO: Check if key-value entry exists in bucket
         # TODO: If found, delete entry associated with given key
