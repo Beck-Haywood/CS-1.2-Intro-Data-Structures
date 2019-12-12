@@ -1,6 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template
 from histogram import read_word_file
 from markov_v2 import *
+import os 
+print(os.path.dirname(os.path.abspath('homer.jpg')))
+
 
 
 
@@ -16,7 +19,9 @@ app = Flask(__name__)
 def tweet():
     words = read_word_file('homer_lines.txt')
     markov_second_order = HigherOrderMarkov(words)
-    return markov_second_order.generate_sentence()
+    sentence = markov_second_order.generate_sentence()
+    return render_template('index.html', sentence=sentence)
+
 
 
 if __name__ == '__main__':
