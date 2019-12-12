@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def tweet():
-    words = read_word_file('homer_lines.txt')
+    words = read_word_file('moe_lines.txt')
     markov_second_order = HigherOrderMarkov(words)
     sentence = markov_second_order.generate_sentence()
     return render_template('index.html', sentence=sentence)
